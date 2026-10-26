@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dilek & Okan - Özel Davetiye</title>
+
+  <!-- Google Fonts: Luxury Serif & Elegant Script -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-burgundy: #2b181c;
+      --gold-main: #c5a059;
+      --gold-light: #e5c889;
+      --bg-dark: #0a0507;
+      
+      --font-title: 'Cinzel', serif;
+      --font-script: 'Alex Brush', cursive;
+      --font-body: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--primary-burgundy);
+      font-family: var(--font-body);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Mobil Ekran Çerçevesi */
+    .mobile-container {
+      width: 100%;
+      max-width: 430px;
+      height: 100vh;
+      background: url('d.jpg') center center / cover no-repeat;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+    }
+
+    /* --------------------------------------------------
+       ZARF KAPAĞI VE MÜHÜR
+    -------------------------------------------------- */
+    .envelope-cover {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1000;
+      display: flex;
+      transition: visibility 1.2s ease;
+    }
+
+    .envelope-cover.open {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .door-left, .door-right {
+      width: 50%; height: 100%;
+      background: url('kahverengi.jpg') no-repeat;
+      background-size: 200% 100%;
+      transition: transform 1.3s cubic-bezier(0.77, 0, 0.175, 1);
+      position: relative;
+    }
+
+    .door-left {
+      background-position: left center;
+      border-right: 1px solid rgba(197, 160, 89, 0.4);
+    }
+
+    .door-right {
+      background-position: right center;
+      border-left: 1px solid rgba(197, 160, 89, 0.4);
+    }
+
+    .envelope-cover.open .door-left { transform: translateX(-100%); }
+    .envelope-cover.open .door-right { transform: translateX(100%); }
+
+    /* Mühür Tıklama Alanı (Görünmez/Şeffaf Yapıldı) */
+    .seal-button {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      z-index: 1001;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      transition: transform 0.4s ease, opacity 0.5s ease;
+    }
+
+    .seal-button::after {
+      content: '';
+      display: none;
+    }
+
+    .seal-button:hover {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .envelope-cover.open .seal-button {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.2);
+    }
+
+    /* --------------------------------------------------
+       KADEMELİ İÇERİK SAHNELERİ
+    -------------------------------------------------- */
+    .stage-container {
+      width: 100%; height: 100%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 25px;
+      text-align: center;
+      z-index: 20;
+    }
+
+    .step {
+      position: absolute;
+      width: 90%;
+      opacity: 0;
+      transform: translateY(25px) scale(0.95);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      pointer-events: none;
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      padding: 20px 10px;
+      border: none;
+      box-shadow: none;
+    }
+
+    .step.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* ADIM 1: Monogram Logo */
+    .monogram-box {
+      border: 1.5px solid var(--gold-main);
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      margin: 0 auto 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(3px);
+    }
+
+    .monogram-text {
+      font-family: var(--font-title);
+      font-size: 2.4rem;
+      color: var(--primary-burgundy);
+      letter-spacing: 6px;
+      padding-left: 6px;
+      text-shadow: 0 1px 3px rgba(255,255,255,0.7);
+    }
+
+    .welcome-subtitle {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      letter-spacing: 4px;
+      color: var(--primary-burgundy);
+      text-transform: uppercase;
+      font-weight: 500;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+    }
+
+    /* ADIM 2: İsimler & Davet Metni */
+    .couple-names {
+      font-family: var(--font-title);
+      font-size: 2.6rem;
+      font-weight: 600;
+      color: var(--primary-burgundy);
+      letter-spacing: 5px;
+      line-height: 1.2;
+      margin-bottom: 25px;
+      text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+    }
+
+    .couple-names span {
+      display: block;
+      font-family: var(--font-script);
+      font-size: 4rem;
+      font-weight: 400;
+      color: var(--gold-main);
+      margin: -12px 0;
+      letter-spacing: 0;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .invitation-text {
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      color: #3b2428;
+      line-height: 1.8;
+      font-weight: 400;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .invitation-verse {
+      margin-top: 15px;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      color: var(--gold-main);
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+    }
+
+    /* ADIM 3: Tarih Detayları */
+    .date-title {
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--primary-burgundy);
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+      text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+    }
+
+    .date-divider {
+      width: 50px;
+      height: 1.5px;
+      background: var(--gold-main);
+      margin: 0 auto 20px;
+    }
+
+    .event-type {
+      font-family: var(--font-script);
+      font-size: 3.2rem;
+      color: var(--gold-main);
+      margin-bottom: 10px;
+    }
+
+    .event-info {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      color: var(--primary-burgundy);
+      text-transform: uppercase;
+      font-weight: 500;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+    }
+
+    /* ADIM 4: Konum Kartı */
+    .venue-title {
+      font-family: var(--font-title);
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      color: var(--primary-burgundy);
+      margin-bottom: 8px;
+      text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+    }
+
+    .venue-address {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: #3b2428;
+      line-height: 1.6;
+      margin-bottom: 25px;
+      font-weight: 400;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+    }
+
+    .btn-map {
+      display: inline-block;
+      width: 80%;
+      padding: 14px 20px;
+      background: var(--primary-burgundy);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 30px;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1px solid var(--gold-main);
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 15px rgba(43, 24, 28, 0.3);
+    }
+
+    .btn-map:hover {
+      background: #42272c;
+    }
+
+    /* Navigation & Control Elements */
+    .next-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-body);
+      font-size: 0.68rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--primary-burgundy);
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      background: rgba(255, 255, 255, 0.75);
+      padding: 8px 22px;
+      border-radius: 20px;
+      border: 1px solid rgba(197, 160, 89, 0.4);
+      backdrop-filter: blur(4px);
+    }
+
+    .next-hint.visible { opacity: 1; }
+
+    .music-btn {
+      position: fixed;
+      top: 20px; right: 20px;
+      width: 40px; height: 40px;
+      background: rgba(255, 253, 248, 0.9);
+      border: 1px solid var(--gold-main);
+      border-radius: 50%;
+      display: flex; justify-content: center; align-items: center;
+      cursor: pointer; z-index: 900;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-container" id="mainContainer">
+
+    <!-- Müzik Kontrolü -->
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+    <audio id="bgMusic" loop>
+      <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=wedding-piano-112624.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ZARF KAPAĞI -->
+    <div class="envelope-cover" id="envelopeCover">
+      <div class="door-left"></div>
+      <div class="door-right"></div>
+      <div class="seal-button" onclick="startJourney()"></div>
+    </div>
+
+    <!-- SAHNELER -->
+    <div class="stage-container" onclick="nextStep()">
+
+      <!-- ADIM 1: Monogram Logo -->
+      <div class="step" id="step1">
+        <div class="monogram-box">
+          <div class="monogram-text">D&O</div>
+        </div>
+        <p class="welcome-subtitle">Aramıza Hoş Geldiniz</p>
+      </div>
+
+      <!-- ADIM 2: İsimler ve Davet Metni -->
+      <div class="step" id="step2">
+        <h1 class="couple-names">
+          DİLEK
+          <span>&</span>
+          OKAN
+        </h1>
+        <p class="invitation-text">
+          "Ve onların kalplerinin arasını sevgi ile birleştirdi."
+        </p>
+        <p class="invitation-verse">~ Enfâl 63</p>
+      </div>
+
+      <!-- ADIM 3: Tarih Detayları -->
+      <div class="step" id="step3">
+        <div class="date-title">20 KASIM 2026</div>
+        <div class="date-divider"></div>
+        <div class="event-type">Nişan Töreni</div>
+        <p class="event-info">CUMA | SAAT 13:30</p>
+      </div>
+
+      <!-- ADIM 4: Konum Kartı -->
+      <div class="step" id="step4">
+        <div style="font-size: 1.8rem; color: var(--gold-main); margin-bottom: 10px;">📍</div>
+        <h2 class="venue-title">KIZ EVİ </h2>
+        <p class="venue-address">Danişment / Kayseri</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=38.680056,35.475222" target="_blank" class="btn-map" onclick="event.stopPropagation();">Haritada Yol Tarifi Al</a>
+      </div>
+
+    </div>
+
+    <!-- İlerleme İpucu -->
+    <div class="next-hint" id="nextHint" onclick="nextStep()">
+      <span>DEVAM ET</span>
+      <span style="font-size: 0.7rem;">↓</span>
+    </div>
+
+  </div>
+
+  <script>
+    let currentStep = 0;
+    const totalSteps = 4;
+
+    function startJourney() {
+      document.getElementById('envelopeCover').classList.add('open');
+      toggleMusic();
+      
+      setTimeout(() => {
+        currentStep = 1;
+        showStep(currentStep);
+        document.getElementById('nextHint').classList.add('visible');
+      }, 700);
+    }
+
+    function nextStep() {
+      if (currentStep === 0) return;
+      
+      if (currentStep < totalSteps) {
+        currentStep++;
+      } else {
+        currentStep = 1;
+      }
+      showStep(currentStep);
+    }
+
+    function showStep(stepNumber) {
+      for (let i = 1; i <= totalSteps; i++) {
+        const stepEl = document.getElementById('step' + i);
+        if (i === stepNumber) {
+          stepEl.classList.add('active');
+        } else {
+          stepEl.classList.remove('active');
+        }
+      }
+    }
+
+    let isPlaying = false;
+    const music = document.getElementById("bgMusic");
+    const musicBtn = document.getElementById("musicBtn");
+
+    function toggleMusic() {
+      if (isPlaying) {
+        music.pause();
+        musicBtn.innerText = "🎵";
+      } else {
+        music.play();
+        musicBtn.innerText = "🔊";
+      }
+      isPlaying = !isPlaying;
+    }
+  </script>
+</body>
+</html>
